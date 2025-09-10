@@ -6891,4 +6891,27 @@ p.checkout-coupon input[type=text]::placeholder {
   }
 }
 
+.product__modal-des ul li{
+  display:list-item !important;
+  list-style: unset !important
+}
+.product__modal-img{
+  height: 394px;
+    width: 394px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.truncate {
+    white-space: nowrap;       /* single line */
+    overflow: hidden;          /* hide overflow */
+    text-overflow: ellipsis;   /* show "..." */
+}
+.truncate-multiline {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;   /* number of lines to show */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
 /*# sourceMappingURL=style.css.map */

@@ -38,7 +38,9 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "app",
-    "dukamarket",
+    'dukamarket',
+    'ckeditor',
+    'ckeditor_uploader',
 ]
 
 MIDDLEWARE = [
@@ -127,3 +129,19 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# Media settings
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
+# CKEditor Upload Path
+CKEDITOR_UPLOAD_PATH = "uploads/"
+
+# Optional toolbar customization
+CKEDITOR_CONFIGS = {
+    "default": {
+        "toolbar": "full",   # or "basic"
+        "height": 300,
+        "width": "100%",
+    },
+}

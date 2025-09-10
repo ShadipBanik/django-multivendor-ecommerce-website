@@ -7,37 +7,13 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         categories_data = {
-            "Electronics": {
-                "Televisions": ["LED TVs", "OLED TVs", "Smart TVs", "4K TVs"],
-                "Audio Equipment": ["Headphones", "Speakers", "Soundbars", "Home Theater Systems"],
-                "Wearable Tech": ["Smartwatches", "Fitness Trackers", "VR Headsets", "Smart Glasses"],
-                "Gaming Consoles": ["PlayStation", "Xbox", "Nintendo Switch", "Retro Consoles"],
-                "Computer Accessories": ["Keyboards", "Mice", "Webcams", "Monitors"],
-                "Networking": ["Routers", "Modems", "Wi-Fi Extenders", "Network Cables"],
-            },
-            "Books": {
-                "Graphic Novels": ["Superhero Comics", "Manga", "Fantasy Comics", "Sci-Fi Comics"],
-                "Cookbooks": ["Baking", "Healthy Recipes", "Regional Cuisine", "Quick Meals"],
-                "Self-Improvement": ["Motivation", "Productivity", "Mindfulness", "Leadership"],
-                "Travel Guides": ["Europe", "Asia", "North America", "Adventure Travel"],
-                "Art & Photography": ["Painting", "Photography Techniques", "Sketching", "Digital Art"],
-                "Science & Technology": ["Astronomy", "Physics", "Robotics", "Computer Science"],
-            },
-            "Home & Kitchen": {
-                "Storage & Organization": ["Closet Organizers", "Storage Bins", "Shelving Units", "Hooks & Hangers"],
-                "Home Decor": ["Wall Art", "Clocks", "Vases", "Candles"],
-                "Cleaning Supplies": ["Vacuum Cleaners", "Mops & Brooms", "Cleaning Chemicals", "Microfiber Cloths"],
-                "Lighting": ["Table Lamps", "Ceiling Lights", "LED Strips", "Outdoor Lights"],
-                "Cookware & Utensils": ["Pots & Pans", "Knives", "Cutting Boards", "Cooking Utensils"],
-                "Smart Home": ["Smart Lights", "Smart Plugs", "Smart Thermostats", "Security Cameras"],
-            },
-            "Clothing, Shoes & Jewelry": {
-                "Men’s Shoes": ["Sneakers", "Formal Shoes", "Boots", "Sandals"],
-                "Women’s Shoes": ["Heels", "Flats", "Boots", "Sneakers"],
-                "Men’s Accessories": ["Belts", "Wallets", "Hats", "Sunglasses"],
-                "Women’s Accessories": ["Scarves", "Handbags", "Jewelry Sets", "Hats"],
-                "Men’s Clothing": ["T-Shirts", "Jeans", "Jackets", "Sweaters"],
-                "Women’s Clothing": ["Dresses", "Tops", "Skirts", "Jumpsuits"],
+            "Mobiles & Accessories": {
+                "Smartphones": ["Android Phones", "iPhones", "Gaming Phones"],
+                "Feature Phones": ["Basic Phones", "Dual SIM Phones", "Senior-Friendly Phones"],
+                "Power Banks": ["Fast Charging", "Solar Power Banks", "High Capacity"],
+                "Cases & Covers": ["Back Covers", "Flip Covers", "Rugged Cases"],
+                "Chargers & Cables": ["Wall Chargers", "Wireless Chargers", "USB Cables"],
+                "Mobile Audio": ["Wired Earphones", "Bluetooth Earbuds", "Headsets"],
             },
         }
 
