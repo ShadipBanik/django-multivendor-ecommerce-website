@@ -8,5 +8,6 @@ urlpatterns = [
     path('base/', views.base, name='base'),
     path("ckeditor/", include("ckeditor_uploader.urls")),
     path("product/quick-view/<int:id>/", views.product_quick_view, name="product_quick_view"),
+    path("product/<slug:slug>/", views.product_detail, name="product_detail"),
 
     ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

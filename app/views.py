@@ -8,13 +8,11 @@ from .models import Slider, Banner_area, Category, MainCategory,Product
 def index(request):
     sliders = Slider.objects.all().order_by('-id')[0:3]
     banners = Banner_area.objects.all().order_by('-id')[0:3]
-    main_category = MainCategory.objects.all()[0:10]
     products = Product.objects.filter(section__name = 'Top Deals Of The Day')
     print(products)
     context = {
         "sliders": sliders,
         "banners": banners,
-        'main_category': main_category,
         'products': products,
     }
 
@@ -39,3 +37,14 @@ def product_quick_view(request, id):
         "images":[img.images.url for img in product.product_image_set.all()] # if you have related ProductImage model
     }
     return JsonResponse(data)
+
+
+def product_detail(request, slug):
+    product = Product.objects.get(slug=slug)
+    main_category = MainCategory.objects.all()[0:10]
+    context = {
+        "product": product,
+        "main_category": main_category,
+    }
+
+    return render(request, "pages/product_detail.html",context)

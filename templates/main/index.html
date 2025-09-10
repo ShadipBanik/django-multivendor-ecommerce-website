@@ -7,7 +7,7 @@
             <div class="swiper-container slider__active">
                 <div class="slider-wrapper swiper-wrapper">
                     {% for slider in sliders %}
-                    <div class="single-slider swiper-slide slider-height d-flex align-items-center" data-background="/{{ slider.image }}">
+                    <div class="single-slider swiper-slide slider-height d-flex align-items-center" data-background="media//{{ slider.image }}">
                         <div class="container">
                             <div class="row">
                                 <div class="col-xl-5">
@@ -93,7 +93,7 @@
                     <div class="col-xl-4 col-lg-4 col-md-6">
                         <div class="banner__item p-relative w-img mb-30">
                             <div class="banner__img">
-                                <a href="product-details.html"><img src="{{banner.image}}" alt=""></a>
+                                <a href="product-details.html"><img src="media/{{banner.image}}" alt=""></a>
                             </div>
                             <div class="banner__content">
                                 <h6><a href="product-details.html">{{banner.discount_deal}} <br> {{banner.qoute}} </a></h6>
@@ -141,8 +141,8 @@
                                 <div class="product__item swiper-slide">
                                     <div class="product__thumb fix">
                                         <div class="product-image w-img">
-                                            <a href="product-details.html">
-                                                <img src="{{product.featured_image}}" alt="product" style="height:242px;">
+                                            <a href="{{product.get_absolute_url}}">
+                                                <img src="media/{{product.featured_image}}" alt="product" style="height:242px;">
                                             </a>
                                         </div>
                                         <div class="product__offer">
@@ -164,7 +164,7 @@
                                         </div>
                                     </div>
                                     <div class="product__content">
-                                        <h6><a href="product-details.html">{{product.product_name|truncatewords:9}}</a></h6>
+                                        <h6><a href="{{product.get_absolute_url}}">{{product.product_name|truncatewords:9}}</a></h6>
                                         <div class="rating mb-5">
                                             <ul>
                                                 <li><a href="#"><i class="fal fa-star"></i></a></li>
@@ -247,8 +247,8 @@
 
                                     </div>
                                     <div class="product__stock mb-20">
-                                        <span class="mr-10" id="modal-product-available"></span>
-                                        <span class="modal-product-quantity"></span>
+                                        <span class="mr-10" >Availability :</span>
+                                        <span class="modal-product-quantity" id="modal-product-available"></span>
                                     </div>
                                     <div class="product__modal-form">
                                         <form action="#">

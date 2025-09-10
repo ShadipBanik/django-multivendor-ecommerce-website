@@ -987,7 +987,7 @@ input {
 }
 .breadcrumb__wrapper .breadcrumb .breadcrumb-item + .breadcrumb-item::before {
   color: #999;
-  content: var(--bs-breadcrumb-divider, "https://html.storebuild.shop/");
+  content: var(--bs-breadcrumb-divider, "/");
 }
 
 .breadcrumb-two ul li {
@@ -6895,12 +6895,21 @@ p.checkout-coupon input[type=text]::placeholder {
   display:list-item !important;
   list-style: unset !important
 }
+
+.features-des ul li{
+  list-style: unset !important
+}
 .product__modal-img{
-  height: 394px;
-    width: 394px;
+    height: 394px;
+    width: 100%;
     display: flex;
     justify-content: center;
-    align-items: center;
+
+}
+
+.product__details-nav-thumb{
+    display: flex;
+    justify-content: center;
 }
 
 .truncate {

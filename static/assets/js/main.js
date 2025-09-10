@@ -629,8 +629,7 @@
                 $("#modal-product-name").text(data.name);
                 $("#modal-product-price").text(data.price+' BDT');
                 $("#modal-product-description").html(data.description) ;
-                $("#modal-product-available").text(data.available_quantity);
-                $("#modal-product-quantity").text(data.total_quantity);
+                $("#modal-product-available").text(data.available_quantity + ' in stock');
                 $("#modal-product-sku").text(data.model_name);
                 $("#modal-product-categories").text(data.categories);
                 $("#modal-product-tags").text(data.tags);
@@ -644,18 +643,17 @@
                 data.images.forEach(function(img, index) {
                     if(index<4){
                     var activeClass = index === 0 ? "active" : "";
-                    var image = img.replace("/media/media/", "/media/")
                     $("#modalTabContent").append(`
                             <div class="tab-pane fade show ${activeClass}" id="nav${index}" role="tabpanel" aria-labelledby="nav${index}-tab">
                                     <div class="product__modal-img w-img">
-                                          <img src="${image}" alt="" style="height:315px; width:300px">
+                                          <img src="${img}" alt="" style="height:277px; width:auto;">
                                     </div>
                             </div>
                     `);
                     $("#modalTab").append(`
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link  ${activeClass}" id="nav${index}-tab" style="height:85px; width:85px" data-bs-toggle="tab" data-bs-target="#nav${index}" type="button" role="tab" aria-controls="nav${index}" aria-selected="true">
-                                    <img src="${image}" alt="" style="height:60px; width:60px">
+                                    <img src="${img}" alt="" style="height:45px; width:auto;">
                                 </button>
                             </li>
                     `)
