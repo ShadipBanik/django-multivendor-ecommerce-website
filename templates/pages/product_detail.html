@@ -1,6 +1,7 @@
 {%  extends 'base.html' %}
 
 {% block content %}
+  {% load  product_discount %}
   {% load static %}
       <!-- breadcrumb__area-start -->
         <section class="breadcrumb__area box-plr-75">
@@ -67,7 +68,7 @@
                                 <span><a href="#">Add your review</a></span>
                             </div>
                             <div class="price mb-10">
-                                <span>{{product.price}} BDT</span>
+                                <span> {% product_discount_calc product.price product.discount %} BDT </span> <del>{{product.price}} BDT</del>
                             </div>
                             <div class="features-des mb-20 mt-10">
                                   {{product.product_information|safe }}

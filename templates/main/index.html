@@ -1,6 +1,7 @@
 {%  extends 'base.html' %}
 
 {% block content %}
+  {% load  product_discount %}
   {% load static %}
              <!-- slider-area-start -->
         <div class="slider-area">
@@ -176,13 +177,13 @@
                                             <span>(01 review)</span>
                                         </div>
                                         <div class="price mb-10">
-                                            <span>{{product.price}} BDT</span>
+                                            <span> {% product_discount_calc product.price product.discount %} </span> <del>{{product.price}} BDT</del>
                                         </div>
                                         <div class="progress mb-5">
-                                            <div class="progress-bar bg-danger" role="progressbar" style="width: 10%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                                            <div class="progress-bar bg-danger" role="progressbar" style="width: {% progress_bar product.total_quantity  product.available_quantity %}%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
                                         </div>
                                         <div class="progress-rate">
-                                            <span>Sold:{{product.available_quantity}}/{{product.total_quantity}}</span>
+                                            <span>Sold: {{product.available_quantity}}/{{product.total_quantity}}</span>
                                         </div>
                                     </div>
                                     <div class="product__add-cart text-center">
@@ -241,7 +242,7 @@
                                         </div>
                                     </div>
                                     <div class="product__price">
-                                        <span id="modal-product-price"></span>
+                                        <span id="modal-product-price"></span>&nbsp;&nbsp;<del id="cut-price"></del>
                                     </div>
                                     <div class="product__modal-des mt-20 mb-15" id="modal-product-description">
 

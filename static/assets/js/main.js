@@ -627,7 +627,9 @@
             method: "GET",
             success: function(data) {
                 $("#modal-product-name").text(data.name);
-                $("#modal-product-price").text(data.price+' BDT');
+                 var price = data.price - (data.price*data.discount/100)
+                $("#modal-product-price").text(Math.floor(price) + ' BDT');
+                $("#cut-price").text(data.price + ' BDT');
                 $("#modal-product-description").html(data.description) ;
                 $("#modal-product-available").text(data.available_quantity + ' in stock');
                 $("#modal-product-sku").text(data.model_name);
