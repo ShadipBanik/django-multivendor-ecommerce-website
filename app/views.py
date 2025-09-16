@@ -4,10 +4,11 @@ from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.template.context_processors import request
 from .admin import Product_Images
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 from django.contrib.auth import authenticate, login as auth_login
 from .helper.forms import RegisterForm
 from .models import Slider, Banner_area, Category, MainCategory,Product
+from django.contrib.auth.decorators import login_required
 
 def index(request):
     sliders = Slider.objects.all().order_by('-id')[0:3]
@@ -98,9 +99,20 @@ def hlogin(request):
 
         if user is not None:
             auth_login(request, user)   # ✅ use Django’s login
-            return HttpResponse('Ok')     # change to your home/dashboard
+            return redirect('home')     # change to your home/dashboard
         else:
             messages.error(request, "Email or password incorrect")
             return redirect("register")
 
     return render(request, "account/register.html")
+
+def logout_view(request):
+    logout(request)  # Clears the session and logs out the user
+    return redirect('home')
+
+@login_required(login_url='register')
+def my_profile(request):
+    return render(request, "account/my-profile/profile.html")
+
+def about_us(request):
+    return render(request, "main/about-us.html")

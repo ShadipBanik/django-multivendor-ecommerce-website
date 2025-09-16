@@ -985,10 +985,12 @@ input {
 .breadcrumb__wrapper .breadcrumb-item.active {
   color: #2F3037;
 }
-.breadcrumb__wrapper .breadcrumb .breadcrumb-item + .breadcrumb-item::before {
+ .breadcrumb-item + .breadcrumb-item::before {
   color: #999;
   content: var(--bs-breadcrumb-divider, "/");
 }
+
+
 
 .breadcrumb-two ul li {
   display: inline-block;
