@@ -669,3 +669,18 @@
 
 })(jQuery);
 
+function submitCategoryForm() {
+    const form = document.getElementById("categoryForm");
+
+    // Build a new URL from current location
+    const url = new URL(window.location.href);
+
+    // Remove any existing "page" parameter → always reset to page 1
+    url.searchParams.delete("page");
+
+    // Set form action to the cleaned URL
+    form.action = url.pathname + url.search;
+
+    // Submit form
+    form.submit();
+}

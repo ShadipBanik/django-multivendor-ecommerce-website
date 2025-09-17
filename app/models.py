@@ -78,9 +78,8 @@ class Product(models.Model):
       discount = models.IntegerField()
       product_information = RichTextField()
       model_name = models.CharField(max_length=100)
-      categories = models.ForeignKey(
-        Category, on_delete=models.CASCADE
-      )
+      categories = models.ForeignKey(SubCategory, on_delete=models.CASCADE)
+
       tags = models.CharField(max_length=100)
       description = RichTextField()
       section = models.ForeignKey(Section, on_delete=models.DO_NOTHING)

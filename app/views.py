@@ -1,5 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth.models import User
+from django.core.paginator import Paginator
+from django.db.models import Count
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.template.context_processors import request
@@ -55,10 +57,8 @@ def product_detail(request, slug):
         print('not exist')
         return  redirect("not_found_404")
 
-    main_category = MainCategory.objects.all()[0:10]
     context = {
         "product": product,
-        "main_category": main_category,
     }
 
     return render(request, "pages/product_detail.html",context)
@@ -116,3 +116,28 @@ def my_profile(request):
 
 def about_us(request):
     return render(request, "main/about-us.html")
+
+def contact_us(request):
+    return render(request, "main/contact.html")
+
+def all_product(request):
+    categories = MainCategory.objects.annotate(
+        product_count=Count('categories__subcategories__product')
+    )
+
+    products = Product.objects.all().order_by('-created_at')
+    per_page_products = 10
+    catId = request.GET.get("cat-item")
+    if catId:
+        print(catId)
+        products = Product.objects.filter(categories__category__main_category_id=catId).order_by('-created_at')
+        print(products)
+    paginator = Paginator(products, 10)
+    page_number = request.GET.get("page")  # current page number
+    page_obj = paginator.get_page(page_number)
+    context = {
+        "categories": categories,
+        "page_obj": page_obj,
+        "cat_ids": catId,
+    }
+    return render(request, "pages/product.html",context)
