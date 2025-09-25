@@ -1,0 +1,139 @@
+  <div class="tab-content" id="productGridTabContent">
+      <div class="tab-pane fade  show active" id="FourCol" role="tabpanel" aria-labelledby="FourCol-tab">
+          <div class="tp-wrapper">
+              <div class="row g-0" id="product-list">
+                {% load  product_discount %}
+                    {% if page_obj %}
+                     {% for product in page_obj %}
+                    <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6">
+                      <div class="product__item product__item-d">
+                          <div class="product__thumb fix">
+                              <div class="product-image w-img">
+                                  <a href="{{product.get_absolute_url}}">
+                                      <img src="/media/{{product.featured_image}}" alt="product" style="height:221px">
+                                  </a>
+                              </div>
+                              <div class="product__offer">
+                                  <span class="discount">{{product.discount}}%</span>
+                               </div>
+                              <div class="product-action">
+                                  <a href="#" class="icon-box icon-box-1 quick-view-btn"  data-id="{{product.id}}" data-bs-toggle="modal" data-bs-target="#productModalId">
+                                      <i class="fal fa-eye"></i>
+                                      <i class="fal fa-eye"></i>
+                                  </a>
+                                  <a href="#" class="icon-box icon-box-1">
+                                      <i class="fal fa-heart"></i>
+                                      <i class="fal fa-heart"></i>
+                                  </a>
+                                  <a href="#" class="icon-box icon-box-1">
+                                      <i class="fal fa-layer-group"></i>
+                                      <i class="fal fa-layer-group"></i>
+                                  </a>
+                              </div>
+                          </div>
+                          <div class="product__content-3">
+                              <h6><a href="{{product.get_absolute_url}}">{{product.product_name|truncatewords:6}}</a></h6>
+                              <div class="rating mb-5">
+                                  <ul>
+                                      <li><a href="#"><i class="fal fa-star"></i></a></li>
+                                      <li><a href="#"><i class="fal fa-star"></i></a></li>
+                                      <li><a href="#"><i class="fal fa-star"></i></a></li>
+                                      <li><a href="#"><i class="fal fa-star"></i></a></li>
+                                      <li><a href="#"><i class="fal fa-star"></i></a></li>
+                                  </ul>
+                                  <span>(01 review)</span>
+                              </div>
+                              <div class="price mb-10">
+                                   <span> {% product_discount_calc product.price product.discount %} BDT </span> <del>{{product.price}} BDT</del>
+                              </div>
+                          </div>
+                          <div class="product__add-cart-s text-center">
+                              <button type="button" class="cart-btn d-flex mb-10 align-items-center justify-content-center w-100">
+                              Add to Cart
+                              </button>
+
+                          </div>
+                      </div>
+                  </div>
+                      {% endfor %}
+                    {% else %}
+                      <p>No products found.</p>
+                   {% endif %}
+              </div>
+          </div>
+      </div>
+      <div class="tab-pane fade" id="FiveCol" role="tabpanel" aria-labelledby="FiveCol-tab">
+          <div class="tp-wrapper-2">
+              {% if page_obj %}
+                {% for product in page_obj %}
+                 <div class="single-item-pd">
+                  <div class="row align-items-center">
+                      <div class="col-xl-9">
+                          <div class="single-features-item single-features-item-df b-radius mb-20">
+                              <div class="row  g-0 align-items-center">
+                                  <div class="col-md-4">
+                                      <div class="features-thum">
+                                          <div class="features-product-image w-img">
+                                              <a href="{{product.get_absolute_url}}"><img src="/media/{{product.featured_image}}" alt=""></a>
+                                          </div>
+                                          <div class="product__offer">
+                                              <span class="discount">{{product.discount}}%%</span>
+                                          </div>
+                                          <div class="product-action">
+                                              <a href="#" class="icon-box icon-box-1 quick-view-btn"  data-id="{{product.id}}"  data-bs-toggle="modal" data-bs-target="#productModalId">
+                                                  <i class="fal fa-eye"></i>
+                                                  <i class="fal fa-eye"></i>
+                                              </a>
+                                              <a href="#" class="icon-box icon-box-1">
+                                                  <i class="fal fa-heart"></i>
+                                                  <i class="fal fa-heart"></i>
+                                              </a>
+                                              <a href="#" class="icon-box icon-box-1">
+                                                  <i class="fal fa-layer-group"></i>
+                                                  <i class="fal fa-layer-group"></i>
+                                              </a>
+                                          </div>
+                                      </div>
+                                  </div>
+                                  <div class="col-md-8">
+                                      <div class="product__content product__content-d">
+                                          <h6><a href="{{product.get_absolute_url}}">{{product.product_name|truncatewords:10}}</a></h6>
+                                          <div class="rating mb-5">
+                                              <ul class="rating-d">
+                                                  <li><a href="#"><i class="fal fa-star"></i></a></li>
+                                                  <li><a href="#"><i class="fal fa-star"></i></a></li>
+                                                  <li><a href="#"><i class="fal fa-star"></i></a></li>
+                                                  <li><a href="#"><i class="fal fa-star"></i></a></li>
+                                                  <li><a href="#"><i class="fal fa-star"></i></a></li>
+                                              </ul>
+                                              <span>(01 review)</span>
+                                          </div>
+                                          <div class="features-des">
+                                              {{product.product_information|safe|truncatewords:30 }}
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="col-xl-3">
+                          <div class="product-stock mb-15">
+                              <h5>Availability: <span> {{product.available_quantity}} in stock</span></h5>
+                              <h6>{% product_discount_calc product.price product.discount %} BDT - <del> {{product.price}} BDT</del></h6>
+                          </div>
+                          <div class="stock-btn ">
+                              <button type="button" class="cart-btn d-flex mb-10 align-items-center justify-content-center w-100">
+                              Add to Cart
+                              </button>
+
+                          </div>
+                      </div>
+                  </div>
+              </div>
+                 {% endfor %}
+              {% else %}
+                <p>No products found.</p>
+              {% endif %}
+          </div>
+      </div>
+  </div>

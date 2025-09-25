@@ -1,0 +1,48 @@
+<div class="tp-pagination text-center">
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="basic-pagination pt-30 pb-30">
+                    <nav>
+                        <ul>
+
+                            {# Previous button #}
+                            {% if page_obj.has_previous %}
+                                <li>
+                                    <a href="?page={{ page_obj.previous_page_number }}{% for c in cat_ids %}&cat-item={{c}}{% endfor %}">
+                                        <i class="fal fa-angle-left"></i>
+                                    </a>
+                                </li>
+                            {% endif %}
+
+                            {# Page numbers #}
+                            {% for num in page_obj.paginator.page_range %}
+                                {% if page_obj.number == num %}
+                                    <li><a href="#" class="active">{{ num }}</a></li>
+                                {% else %}
+                                    <li>
+                                        <a href="?page={{ num }}
+                                           {% for c in cat_ids %}&cat-item={{c}}{% endfor %}
+                                           &per_page={{ per_page }}">
+                                           {{ num }}
+                                        </a>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+
+                            {# Next button #}
+                            {% if page_obj.has_next %}
+                                <li>
+                                    <a href="?page={{ page_obj.next_page_number }}
+                                       {% for c in cat_ids %}&cat-item={{c}}{% endfor %}
+                                       &per_page={{ per_page }}">
+                                       <i class="fal fa-angle-right"></i>
+                                    </a>
+                                </li>
+                            {% endif %}
+
+                        </ul>
+                    </nav>
+                </div>
+        </div>
+    </div>
+</div>

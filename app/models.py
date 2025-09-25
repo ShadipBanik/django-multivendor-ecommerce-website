@@ -1,5 +1,7 @@
+from django.contrib.auth.models import User
 from django.db import models
 from ckeditor.fields import RichTextField
+from django.db.models import Avg, Count
 # Create your models here.
 from django.utils.text import slugify
 from django.db.models.signals import pre_save
@@ -74,7 +76,7 @@ class Product(models.Model):
       available_quantity = models.IntegerField()
       featured_image = models.ImageField(upload_to='product')
       product_name = models.CharField(max_length=100)
-      price = models.IntegerField()
+      price = models.IntegerField(default=0)
       discount = models.IntegerField()
       product_information = RichTextField()
       model_name = models.CharField(max_length=100)
@@ -94,9 +96,29 @@ class Product(models.Model):
           from django.urls import reverse
           return reverse("product_detail", kwargs={"slug": self.slug})
 
+      def average_rating(self):
+          return self.reviews.aggregate(avg=Avg("rating"))["avg"] or 0
+
+      def review_count(self):
+          return self.reviews.aggregate(count=Count("id"))["count"] or 0
+
       class Meta:
           db_table = "product"
 
+class ProductReview(models.Model):
+    product = models.ForeignKey(Product, related_name="reviews", on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    rating = models.IntegerField()
+    review = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ("product", "user")  # Prevent duplicate reviews
+
+
+    def __str__(self):
+        return f"{self.product.product_name} - {self.rating}⭐"
 
 def create_unique_slug(instance, new_slug=None):
     slug = slugify(instance.product_name)

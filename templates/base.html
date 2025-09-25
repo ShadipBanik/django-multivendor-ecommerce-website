@@ -136,10 +136,93 @@
 
 
         {% endblock %}
+        <div class="modal fade" id="productModalId" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered product__modal" role="document">
+                <div class="modal-content">
+                    <div class="product__modal-wrapper p-relative">
+                        <div class="product__modal-close p-absolute">
+                            <button data-bs-dismiss="modal"><i class="fal fa-times"></i></button>
+                        </div>
+                        <div class="product__modal-inner">
+                            <div class="row">
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                <div class="product__modal-box">
+                                    <div class="tab-content" id="modalTabContent">
+
+                                    </div>
+                                    <ul class="nav nav-tabs" id="modalTab" role="tablist">
+
+                                        </ul>
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                <div class="product__modal-content">
+                                    <h4><a href="#" class="truncate-multiline" id="modal-product-name"></a></h4>
+                                    <div class="product__review d-sm-flex">
+                                        <div class="rating rating__shop mb-10 mr-30">
+                                        <ul>
+                                            <li><a href="#"><i class="fal fa-star"></i></a></li>
+                                            <li><a href="#"><i class="fal fa-star"></i></a></li>
+                                            <li><a href="#"><i class="fal fa-star"></i></a></li>
+                                            <li><a href="#"><i class="fal fa-star"></i></a></li>
+                                            <li><a href="#"><i class="fal fa-star"></i></a></li>
+                                        </ul>
+                                        </div>
+                                        <div class="product__add-review mb-15">
+                                        <span>01 review</span>
+                                        </div>
+                                    </div>
+                                    <div class="product__price">
+                                        <span id="modal-product-price"></span>&nbsp;&nbsp;<del id="cut-price"></del>
+                                    </div>
+                                    <div class="product__modal-des mt-20 mb-15" id="modal-product-description">
+
+                                    </div>
+                                    <div class="product__stock mb-20">
+                                        <span class="mr-10" >Availability :</span>
+                                        <span class="modal-product-quantity" id="modal-product-available"></span>
+                                    </div>
+                                    <div class="product__modal-form">
+                                        <form action="#">
+                                        <div class="pro-quan-area d-lg-flex align-items-center">
+                                            <div class="product-quantity mr-20 mb-25">
+                                                <div class="cart-plus-minus p-relative"><input type="text" value="1" /></div>
+                                            </div>
+                                            <div class="pro-cart-btn mb-25">
+                                                <button class="cart-btn" type="submit">Add to cart</button>
+                                            </div>
+                                        </div>
+                                        </form>
+                                    </div>
+                                    <div class="product__stock mb-30">
+                                        <ul>
+                                            <li><a href="#">
+                                                <span class="sku mr-10">SKU:</span>
+                                                <span id="modal-product-sku"></span></a>
+                                            </li>
+                                            <li><a href="#">
+                                                <span class="cat mr-10">Categories:</span>
+                                                <span id="modal-product-categories"></span></a>
+                                            </li>
+                                            <li><a href="#">
+                                                <span class="tag mr-10">Tags:</span>
+                                                <span id="modal-product-tags"></span></a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
     </main>
 
-
+            <!-- shop modal start -->
+        <!-- shop modal end -->
 
 
 
@@ -159,6 +242,7 @@
       <script src="{% static 'assets/js/parallax.js' %}"></script>
       <script src="{% static 'assets/js/backtotop.js' %}"></script>
       <script src="{% static 'assets/js/nice-select.js' %}"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.1/jquery.waypoints.min.js"></script>
       <script src="{% static 'assets/js/countdown.min.js' %}"></script>
       <script src="{% static 'assets/js/counterup.js' %}"></script>
       <script src="{% static 'assets/js/wow.js' %}"></script>

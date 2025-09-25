@@ -1,15 +1,21 @@
+import traceback
+
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator
-from django.db.models import Count
+from django.db.models import Count, Min, Max, Avg
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.template.context_processors import request
+from django.template.loader import render_to_string
+
 from .admin import Product_Images
 from django.contrib.auth import login, logout
 from django.contrib.auth import authenticate, login as auth_login
+
+from .helper.ProductReviewForm import ProductReviewForm
 from .helper.forms import RegisterForm
-from .models import Slider, Banner_area, Category, MainCategory,Product
+from .models import Slider, Banner_area, Category, MainCategory, Product, ProductReview
 from django.contrib.auth.decorators import login_required
 
 def index(request):
@@ -41,6 +47,7 @@ def product_quick_view(request, id):
         "categories": product.categories.name,
         "discount": product.discount,
         "tags": product.tags,
+        "get_absolute_url":product.get_absolute_url(),
         "additional_info": [{'specification':info.specification,'detail':info.detail} for info in product.additional_information_set.all()],
         "images":[img.images.url for img in product.product_image_set.all()] # if you have related ProductImage model
     }
@@ -48,19 +55,44 @@ def product_quick_view(request, id):
 
 
 def product_detail(request, slug):
-    product = Product.objects.filter(slug=slug)
+    product = get_object_or_404(Product, slug=slug)
+    reviews = product.reviews.all().order_by("-created_at")
+    avg_rating = product.reviews.aggregate(avg=Avg("rating"))["avg"] or 0
+    review_count = product.reviews.count()
+    form = ProductReviewForm(request.POST)
+    if request.method == "POST":
+        form = ProductReviewForm(request.POST)
+        if form.is_valid():
+            rating = form.cleaned_data["rating"]
+            review_text = form.cleaned_data["review"]
 
-    if product.exists():
-        print('exist')
-        product = Product.objects.get(slug=slug)
+            review, created = ProductReview.objects.update_or_create(
+                product=product,
+                user=request.user,
+                defaults={
+                    "rating": rating,
+                    "review": review_text,
+                }
+            )
+
+            if created:
+                messages.success(request, "✅ Your review has been added successfully!")
+            else:
+                messages.info(request, "✏️ Your review was updated successfully!")
+
+            return redirect(product.get_absolute_url())
     else:
-        print('not exist')
-        return  redirect("not_found_404")
+        form = ProductReviewForm()
+
+
 
     context = {
         "product": product,
+        "reviews": reviews,
+        "avg_rating": avg_rating,
+        "review_count": review_count,
+        "form": form,
     }
-
     return render(request, "pages/product_detail.html",context)
 
 def not_found_404(request):
@@ -121,23 +153,64 @@ def contact_us(request):
     return render(request, "main/contact.html")
 
 def all_product(request):
-    categories = MainCategory.objects.annotate(
-        product_count=Count('categories__subcategories__product')
-    )
+    try:
+        categories = MainCategory.objects.annotate(
+            product_count=Count('categories__subcategories__product')
+        )
 
-    products = Product.objects.all().order_by('-created_at')
-    per_page_products = 10
-    catId = request.GET.get("cat-item")
-    if catId:
-        print(catId)
-        products = Product.objects.filter(categories__category__main_category_id=catId).order_by('-created_at')
-        print(products)
-    paginator = Paginator(products, 10)
-    page_number = request.GET.get("page")  # current page number
-    page_obj = paginator.get_page(page_number)
-    context = {
-        "categories": categories,
-        "page_obj": page_obj,
-        "cat_ids": catId,
-    }
-    return render(request, "pages/product.html",context)
+        products = Product.objects.all().order_by('-created_at')
+
+        # category filter (single)
+        cat_id = request.GET.get("cat-item")
+
+        if cat_id:
+            products = products.filter(categories__category__main_category_id=cat_id)
+
+        # price filter
+        min_price = request.GET.get("min_price")
+        max_price = request.GET.get("max_price")
+        print("DEBUG received:", min_price, max_price)
+
+        if min_price and max_price:
+            try:
+                min_price = int(min_price)
+                max_price = int(max_price)
+                if min_price > 0 or max_price > 0:
+                    products = products.filter(price__gte=min_price, price__lte=max_price)
+            except ValueError:
+                print("DEBUG: invalid min/max price")
+                pass
+
+        print("DEBUG queryset:", products)
+        print("DEBUG price range:", products.aggregate(Min("price"), Max("price")))
+
+        # per-page filter
+        per_page = request.GET.get("per_page", 2)
+        try:
+            per_page = int(per_page)
+        except ValueError:
+            per_page = 1
+
+        paginator = Paginator(products, per_page)
+        page_number = request.GET.get("page")
+        page_obj = paginator.get_page(page_number)
+
+        context = {
+            "categories": categories,
+            "page_obj": page_obj,
+            "cat_id": cat_id,
+            "per_page": per_page,
+        }
+
+        if request.headers.get("x-requested-with") == "XMLHttpRequest":
+            products_html = render_to_string("pages/partials/_product_list.html", context, request=request)
+            pagination_html = render_to_string("pages/partials/_pagination.html", context, request=request)
+            return JsonResponse({
+                "products_html": products_html,
+                "pagination_html": pagination_html,
+            })
+
+        return render(request, "pages/product.html", context)
+
+    except Exception as e:
+        return JsonResponse({"error": str(e), "traceback": traceback.format_exc()}, status=500)

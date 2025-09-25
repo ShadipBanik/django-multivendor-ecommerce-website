@@ -58,13 +58,15 @@
                             <h6>{{product.product_name}}</h6>
                             <div class="pd-rating mb-10">
                                 <ul class="rating">
-                                    <li><a href="#"><i class="fal fa-star"></i></a></li>
-                                    <li><a href="#"><i class="fal fa-star"></i></a></li>
-                                    <li><a href="#"><i class="fal fa-star"></i></a></li>
-                                    <li><a href="#"><i class="fal fa-star"></i></a></li>
-                                    <li><a href="#"><i class="fal fa-star"></i></a></li>
+                                          {% for i in "12345" %}
+                                                 {% if forloop.counter <= avg_rating %}
+                                                    <a href="#"><i class="fas fa-star"></i></a>
+                                                 {% else %}
+                                                    <a href="#"><i class="fal fa-star"></i></a>
+                                                 {% endif %}
+                                           {% endfor %}
                                 </ul>
-                                <span>(01 review)</span>
+                                <span>({{ review_count }} review)</span>
                                 <span><a href="#">Add your review</a></span>
                             </div>
                             <div class="price mb-10">
@@ -136,7 +138,7 @@
                                     <button class="nav-link" id="aditional-tab" data-bs-toggle="tab" data-bs-target="#aditional" type="button" role="tab" aria-controls="aditional" aria-selected="false">Additional information</button>
                                   </li>
                                 <li class="nav-item" role="presentation">
-                                  <button class="nav-link" id="review-tab" data-bs-toggle="tab" data-bs-target="#review" type="button" role="tab" aria-controls="review" aria-selected="false">Reviews (1) </button>
+                                  <button class="nav-link" id="review-tab" data-bs-toggle="tab" data-bs-target="#review" type="button" role="tab" aria-controls="review" aria-selected="false">Reviews ({{review_count}}) </button>
                                 </li>
                               </ul>
                         </div>
@@ -163,81 +165,98 @@
                     </div>
                     <div class="tab-pane fade" id="review" role="tabpanel" aria-labelledby="review-tab">
                         <div class="product__details-review">
+
                             <div class="row">
                                 <div class="col-xl-4">
                                     <div class="review-rate">
-                                        <h5>5.00</h5>
+                                        <h5>{{ avg_rating|floatformat:2 }}</h5>
                                         <div class="review-star">
-                                            <a href="#"><i class="fas fa-star"></i></a>
-                                            <a href="#"><i class="fas fa-star"></i></a>
-                                            <a href="#"><i class="fas fa-star"></i></a>
-                                            <a href="#"><i class="fas fa-star"></i></a>
-                                            <a href="#"><i class="fas fa-star"></i></a>
+                                           {% for i in "12345" %}
+                                                 {% if forloop.counter <= avg_rating %}
+                                                    <a href="#"><i class="fas fa-star"></i></a>
+                                                 {% else %}
+                                                    <a href="#"><i class="fal fa-star"></i></a>
+                                                 {% endif %}
+                                           {% endfor %}
                                         </div>
-                                        <span class="review-count">01 Review</span>
+                                        <span class="review-count">{{ review_count }} Review</span>
                                     </div>
                                 </div>
                                 <div class="col-xl-8">
                                     <div class="review-des-infod">
-                                        <h6>1 review for "<span>Wireless Bluetooth Over-Ear Headphones</span>"</h6>
-                                        <div class="review-details-des">
+                                        <h6>{{ review_count }} review for "<span> {{product.product_name}}</span>"</h6>
+
+                                        {% for r in reviews %}
+                                         <div class="review-details-des">
                                             <div class="author-image mr-15">
                                                 <a href="#"><img src="{% static 'assets/img/author/author-sm-1.jpg' %}" alt=""></a>
                                             </div>
                                             <div class="review-details-content">
                                                 <div class="str-info">
-                                                    <div class="review-star mr-15">
-                                                        <a href="#"><i class="fas fa-star"></i></a>
-                                                        <a href="#"><i class="fas fa-star"></i></a>
-                                                        <a href="#"><i class="fas fa-star"></i></a>
-                                                        <a href="#"><i class="fas fa-star"></i></a>
-                                                        <a href="#"><i class="fas fa-star"></i></a>
+                                                    <div class="review-star">
+                                                       {% for i in "12345" %}
+                                                             {% if forloop.counter <= r.rating %}
+                                                                <a href="#"><i class="fas fa-star"></i></a>
+                                                             {% else %}
+                                                                <a href="#"><i class="fal fa-star"></i></a>
+                                                             {% endif %}
+                                                       {% endfor %}
                                                     </div>
-                                                    <div class="add-review-option">
-                                                        <a href="#">Add Review</a>
-                                                    </div>
+
                                                 </div>
                                                 <div class="name-date mb-30">
-                                                    <h6> admin – <span> May 27, 2021</span></h6>
+                                                    <h6> {{r.user.username}} – <span> {{ r.created_at|date:"M d, Y" }}</span></h6>
                                                 </div>
-                                                <p>A light chair, easy to move around the dining table and about the room. Duis aute irure dolor in reprehenderit in <br> voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+                                                <p>{{r.review}}</p>
                                             </div>
                                         </div>
+                                        {% endfor %}
+
                                     </div>
                                 </div>
                             </div>
+                            {% if user.is_authenticated %}
                             <div class="row">
                                 <div class="col-xl-12">
                                     <div class="product__details-comment ">
+                                     {% if messages  %}
+                                      {% for message in messages %}
+                                        {% if message.tags == 'success' %}
+                                            <div class="alert alert-success  alert-dismissible fade show" role="alert">
+                                               <strong>{{ message.tags }}!</strong> {{message}}
+                                               <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                            </div>
+                                        {% elif  message.tags == 'error' %}
+                                             <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                               <strong>{{ message.tags }}!</strong> {{message}}
+                                               <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                            </div>
+                                        {% endif %}
+                                      {% endfor %}
+                                     {% endif %}
                                         <div class="comment-title mb-20">
                                            <h3>Add a review</h3>
                                            <p>Your email address will not be published. Required fields are marked *</p>
                                         </div>
                                         <div class="comment-rating mb-20">
                                            <span>Overall ratings</span>
-                                           <ul>
-                                              <li><a href="#"><i class="fas fa-star"></i></a></li>
-                                              <li><a href="#"><i class="fas fa-star"></i></a></li>
-                                              <li><a href="#"><i class="fas fa-star"></i></a></li>
-                                              <li><a href="#"><i class="fas fa-star"></i></a></li>
-                                              <li><a href="#"><i class="fas fa-star"></i></a></li>
-                                           </ul>
+                                            <div class="rating-stars mb-2">
+                                                <span data-value="1"><i class="fal fa-star"></i></span>
+                                                <span data-value="2"><i class="fal fa-star"></i></span>
+                                                <span data-value="3"><i class="fal fa-star"></i></span>
+                                                <span data-value="4"><i class="fal fa-star"></i></span>
+                                                <span data-value="5"><i class="fal fa-star"></i></span>
+                                            </div>
                                         </div>
                                         <div class="comment-input-box">
-                                           <form action="#">
+                                           <form id="reviewForm" method="post" data-url="{% url 'product_detail' product.slug %}">
+                                               {% csrf_token %}
                                               <div class="row">
-                                                <div class="col-xxl-6 col-xl-6">
-                                                    <div class="comment-input">
-                                                       <input type="text" placeholder="Your Name">
-                                                    </div>
-                                                 </div>
-                                                 <div class="col-xxl-6 col-xl-6">
-                                                    <div class="comment-input">
-                                                       <input type="email" placeholder="Your Email">
-                                                    </div>
-                                                 </div>
+                                                  {{ form.rating}}
                                                  <div class="col-xxl-12">
-                                                       <textarea placeholder="Your review" class="comment-input comment-textarea"></textarea>
+                                                           <div class="form-group ">
+                                                                {{ form.review }}
+                                                            </div>
                                                  </div>
                                                  <div class="col-xxl-12">
                                                     <div class="comment-agree d-flex align-items-center mb-25">
@@ -260,6 +279,7 @@
                                      </div>
                                 </div>
                             </div>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -394,5 +414,4 @@
             </div>
         </div>
         <!-- shop modal end -->
-
 {% endblock %}

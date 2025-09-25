@@ -832,7 +832,7 @@ input {
   color: #222;
 }
 .product__modal-content .product__modal-des ul li {
-  display: inline-block;
+
 }
 .product__modal-content .product__modal-des ul li a {
   font-size: 14px;
@@ -4480,7 +4480,7 @@ input {
 .review-rate h5 span {
   font-size: 24px;
 }
-.review-rate .review-star a .fa-star {
+.fa-star {
   color: #fcbe00;
 }
 
@@ -6894,18 +6894,20 @@ p.checkout-coupon input[type=text]::placeholder {
 }
 
 .product__modal-des ul li{
-  display:list-item !important;
-  list-style: unset !important
+  display:list-item;
+  list-style: disc !important;
 }
 
 .features-des ul li{
-  list-style: unset !important
+     list-style: unset !important
+
 }
 .product__modal-img{
     height: 394px;
     width: 100%;
     display: flex;
     justify-content: center;
+    align-items: anchor-center;
 
 }
 
@@ -6925,4 +6927,10 @@ p.checkout-coupon input[type=text]::placeholder {
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
+
+.rating-stars span{
+  cursor:pointer
+
+ }
+
 /*# sourceMappingURL=style.css.map */

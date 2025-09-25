@@ -619,18 +619,108 @@
 		setupSequence();
 	}
 	
-	 $(".quick-view-btn").click(function() {
-        var productId = $(this).data("id");
 
+
+function loadProducts(url = PRODUCT_URL) {
+    const params = {};
+
+    // category params
+    $("#categoryForm").find("input[name='cat-item']:checked").each(function () {
+        params[$(this).attr("name")] = $(this).val();
+    });
+
+    // per-page params
+    params["per_page"] = $("#perPageSelect").val();
+    params["min_price"] = $("#min_price").val();
+    params["max_price"] = $("#max_price").val();
+    console.log(params)
+    $.ajax({
+        url: url,
+        type: "GET",
+        data: params,
+        headers: { "X-Requested-With": "XMLHttpRequest" },
+        dataType: "json",
+        success: function (data) {
+            if (data.error) {
+                console.error(data.error);
+                return;
+            }
+            const container = $("#product-container");
+            if (container.length) {
+                container.html(data.products_html + data.pagination_html);
+                bindPagination();
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error(error);
+        }
+    });
+}
+
+    // Pagination AJAX
+    function bindPagination() {
+        $(".basic-pagination a").off("click").on("click", function (e) {
+            e.preventDefault();
+            let pageUrl = $(this).attr("href");
+
+            if (!pageUrl || pageUrl === "#") return;
+
+            // Ensure full URL
+            if (!pageUrl.startsWith("http") && !pageUrl.startsWith("/")) {
+                pageUrl = PRODUCT_URL + pageUrl;
+            }
+
+            // Get per_page value
+            const perPage = $("#perPageSelect").val();
+            if (perPage) {
+                if (pageUrl.includes("?")) {
+                    pageUrl += "&per_page=" + perPage;
+                } else {
+                    pageUrl += "?per_page=" + perPage;
+                }
+            }
+
+            loadProducts(pageUrl);
+        });
+    }
+
+
+    // Category change (radio)
+    $("#categoryForm input[name='cat-item']").on("change", function (e) {
+        loadProducts();
+    });
+
+    // Per-page change
+    $("#perPageSelect").on("change", function (e) {
+        loadProducts();
+    });
+
+    // Run first time
+    $(document).ready(function () {
+        bindPagination();
+    });
+
+   function truncateText(selector, maxWords) {
+    $(selector).each(function() {
+        var text = $(this).text().split(" ");
+        if (text.length > maxWords) {
+            $(this).text(text.slice(0, maxWords).join(" ") + "...");
+        }
+    });
+   }
+   $(document).on("click", ".quick-view-btn", function(e) {
+	    e.preventDefault();
+        var productId = $(this).data("id");
         $.ajax({
             url: "/product/quick-view/" + productId + "/",
             method: "GET",
             success: function(data) {
-                $("#modal-product-name").text(data.name);
+                $("#modal-product-name").attr("href", data.get_absolute_url).text(data.name);
                  var price = data.price - (data.price*data.discount/100)
                 $("#modal-product-price").text(Math.floor(price) + ' BDT');
                 $("#cut-price").text(data.price + ' BDT');
                 $("#modal-product-description").html(data.description) ;
+                truncateText("#modal-product-description", 30);
                 $("#modal-product-available").text(data.available_quantity + ' in stock');
                 $("#modal-product-sku").text(data.model_name);
                 $("#modal-product-categories").text(data.categories);
@@ -667,20 +757,63 @@
         });
     });
 
+   $("#priceForm").on("submit", function (e) {
+    e.preventDefault();
+    loadProducts();
+   });
+
+   $(function () {
+    $("#slider-range").slider({
+        range: true,
+        min: 0,
+        max: 10000, // set max price depending on your products
+        values: [0, 0],
+        slide: function (event, ui) {
+            $("#amount").val("$" + ui.values[0] + " - $" + ui.values[1]);
+            $("#min_price").val(ui.values[0]);
+            $("#max_price").val(ui.values[1]);
+        }
+    });
+
+    // Set default values
+    $("#amount").val(
+        "$" + $("#slider-range").slider("values", 0) +
+        " - $" + $("#slider-range").slider("values", 1)
+    );
+    $("#min_price").val($("#slider-range").slider("values", 0));
+    $("#max_price").val($("#slider-range").slider("values", 1));
+   });
+
+
+   $(document).ready(function () {
+    // ⭐ Click star to fill rating
+    $(".rating-stars span").on("click", function () {
+        let value = $(this).data("value");
+        $("#id_rating").val(value); // set hidden input
+
+        // reset stars
+        $(".rating-stars span i").removeClass("fas").addClass("fal");
+
+        // fill stars up to selected
+        $(".rating-stars span").each(function () {
+            if ($(this).data("value") <= value) {
+                $(this).find("i").removeClass("fal").addClass("fas");
+            }
+        });
+    });
+
+    // 📩 AJAX submit form
+        document.addEventListener("DOMContentLoaded", function () {
+            let form = document.getElementById("reviewForm");
+            let actionUrl = form.getAttribute("data-url");
+            form.setAttribute("action", actionUrl);
+        });
+
+});
+
+
+
+
 })(jQuery);
 
-function submitCategoryForm() {
-    const form = document.getElementById("categoryForm");
 
-    // Build a new URL from current location
-    const url = new URL(window.location.href);
-
-    // Remove any existing "page" parameter → always reset to page 1
-    url.searchParams.delete("page");
-
-    // Set form action to the cleaned URL
-    form.action = url.pathname + url.search;
-
-    // Submit form
-    form.submit();
-}
